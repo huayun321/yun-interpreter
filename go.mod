@@ -1,3 +1,3 @@
-module github.com/huayun321/yun-interpreter
+module yun-interpreter
 
 go 1.19
