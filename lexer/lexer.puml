@@ -1,0 +1,21 @@
+@startuml
+namespace lexer {
+    class Lexer << (S,Aquamarine) >> {
+        - input string
+        - position int
+        - readPosition int
+        - ch byte
+
+        - readChar() 
+        - readIdentifier() string
+        - readNumber() string
+        - skipWhitespace() 
+        - peekChar() byte
+
+        + NextToken() token.Token
+
+    }
+}
+
+
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+namespace token {
+    class Token << (S,Aquamarine) >> {
+        + Type TokenType
+        + Literal string
+
+    }
+    class token.TokenType << (T, #FF7700) >>  {
+    }
+}
+
+
+"__builtin__.string" #.. "token.TokenType"
+@enduml
