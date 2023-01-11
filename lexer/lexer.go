@@ -1,6 +1,8 @@
 package lexer
 
-import "yun-interpreter/token"
+import (
+	"yun-interpreter/token"
+)
 
 type Lexer struct {
 	input        string

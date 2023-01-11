@@ -1,0 +1,27 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:Lexer.New();
+note
+填充字符串
+校准指针
+end note
+:NextToken();
+note
+读取下一个字符
+end note
+
+switch (l.ch)
+case("+")
+:newToken(token.PLUS, l.ch);
+case("-")
+:newToken(token.MINUS, l.ch);
+case(0)
+:newToken(token.EOF, "");
+endswitch
+
+:readChar();
+stop
+
+@enduml
