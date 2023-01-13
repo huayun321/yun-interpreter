@@ -1,0 +1,52 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:parse;
+:program := &ast.Program{};
+:program.Statements = []ast.Statement;
+repeat
+:stmt := p.parseStatement();
+switch(p.curToken.Type)
+case(token.LET)
+:p.parseLetStatement;
+:stmt := &ast.LetStatement{Token: p.curToken};
+if(!p.expectPeek(token.IDENT)) then
+:return nil;
+detach
+endif
+:stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Value};
+if(!p.expectPeek(token.ASSIGN)) then
+:return nil;
+kill
+endif
+repeat
+:p.nextToken();
+repeat while (!p.curTokenIs(token.SEMICOLON))
+case(token.RETURN)
+:p.parseReturnStatement;
+case(default)
+:p.parseExpressionStatement;
+:stmt=&ast.ExpressionStatement{Token: p.curToken};
+:stmt.Expression=p.parseExpression(LOWEST);
+:prefix := p.prefixParseFns[p.curToentype];
+if (prefix == nil) then
+:return nil;
+kill
+endif
+:leftExp := prefix();
+if (p.peekTokenIs(token.SEMICOLON)) then
+:p.nextToken;
+:return stmt;
+endif
+endswitch
+if (stmt != nil) then
+:program.Statements = append(program.Statements, stmt);
+endif
+:p.nextToken();
+repeat while (p.curToken.Type != token.EOF)
+:return program;
+
+stop
+
+@enduml
