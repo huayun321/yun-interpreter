@@ -13,12 +13,29 @@ note
 end note
 
 switch (l.ch)
+case("=")
+if (l.peekChar()=="=") then
+
+:l.readChar() newToken(token.EQ, l.ch+l.ch);
+else
+:newToken(token.PLUS, l.ch);
+endif
 case("+")
 :newToken(token.PLUS, l.ch);
 case("-")
 :newToken(token.MINUS, l.ch);
 case(0)
 :newToken(token.EOF, "");
+case(default)
+if (isLetter(l.ch)) then
+:.readIdentifier() ;
+stop
+elseif (isDigit(l.ch))
+:l.readNumber() ;
+stop
+else
+:tok=newToken(token.ILLEGAL, l.ch);
+endif
 endswitch
 
 :readChar();
