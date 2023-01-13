@@ -38,6 +38,7 @@ endif
 if (p.peekTokenIs(token.SEMICOLON)) then
 :p.nextToken;
 :return stmt;
+kill
 endif
 endswitch
 if (stmt != nil) then
