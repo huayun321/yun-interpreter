@@ -35,11 +35,34 @@ if (prefix == nil) then
 kill
 endif
 :leftExp := prefix();
-if (p.peekTokenIs(token.SEMICOLON)) then
-:p.nextToken;
-:return stmt;
-kill
+switch(p)
+case(IDENT)
+:parseIdentifier();
+case(NUMBER)
+:parseIntegerLiteral();
+case(MINUS)
+:parsePrefixExpression();
+:expression := &ast.PrefixExpression();
+:p.nextToken();
+:expression.Right = p.parseExpression(PREFIX);
+endswitch
+repeat
+:infix:= p.infixParseFns[p.peekToken.Type];
+if (infix == nil) then
+:return leftExp;
+break
 endif
+:p.nextToken();
+:leftExp=infix(leftExp);
+group parseInfixExpression
+    :expression:=&ast.InfixExpression;
+    :precedence := p.curPrecedence();
+    :p.nextToken();
+    :expression.Right = p.parseExpression(precedence);
+    :return expression;
+endgroup
+repeat while(!p.peekTokenIs(token.SEMICOLON) && precedence<p.peekPrecedence())
+
 endswitch
 if (stmt != nil) then
 :program.Statements = append(program.Statements, stmt);
